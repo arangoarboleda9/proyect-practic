@@ -1,28 +1,25 @@
 from google.cloud import bigquery
-import pandas as pd # Asegúrate de tener esto
+import pandas as pd
 
 def load_to_bigquery(df, project_id, dataset_id, table_id):
-    # 1. Creamos el cliente
     client = bigquery.Client(project=project_id)
-    
-    # 2. CONVERSIÓN DE SEGURIDAD: Convertir todas las columnas tipo objeto a datetime
-    # Esto soluciona el error 'Failed to parse string'
-    for col in df.columns:
-        if df[col].dtype == 'object':
-            try:
-                df[col] = pd.to_datetime(df[col], utc=True)
-            except (ValueError, TypeError):
-                continue # Si no es fecha, lo ignoramos
-
-    # 3. Formamos la referencia
     table_ref = f"{project_id}.{dataset_id}.{table_id}"
     
-    # 4. Configuramos la carga
+    # --- CORRECCIÓN AQUÍ ---
+    # Busca columnas que contengan fechas y asegúrate de convertirlas
+    # Si sabes el nombre exacto, cámbialo por 'nombre_de_tu_columna'
+    for col in df.columns:
+        # Detectamos si la columna parece ser de tipo fecha basándonos en el nombre o contenido
+        if 'timestamp' in col.lower() or 'date' in col.lower():
+            df[col] = pd.to_datetime(df[col])
+            # Si el error persiste, intenta forzar la zona horaria UTC:
+            # df[col] = pd.to_datetime(df[col]).dt.tz_localize('UTC')
+    # -----------------------
+
     job_config = bigquery.LoadJobConfig(
         write_disposition=bigquery.WriteDisposition.WRITE_APPEND
     )
     
-    # 5. Cargamos el DataFrame
     job = client.load_table_from_dataframe(df, table_ref, job_config=job_config)
     job.result()
     
