@@ -3,8 +3,8 @@ from transform import transform_data
 from load import load_to_bigquery
 
 def run_pipeline(request=None): 
-    API_KEY = 'your_api_key'
-    PROJECT_ID = 'your_project_id'
+    API_KEY = '8be2fa82f26df7c970320c430775ad74'
+    PROJECT_ID = 'project-a76de606-6cf7-4a6e-89e'
     DATASET_ID = 'your_dataset_id'
     TABLE_ID = 'your_table_id'
 
