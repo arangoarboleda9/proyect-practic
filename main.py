@@ -3,7 +3,7 @@ from transform import transform_data
 from load import load_to_bigquery
 
 def run_pipeline(request=None): 
-    API_KEY = 'ca1f23dad5a35b414121ab395549412c'
+    API_KEY = 'e50815c90d5a1d6281815d2dc01459a6'
     PROJECT_ID = 'project-a76de606-6cf7-4a6e-89e'
     DATASET_ID = 'weather_data'
     TABLE_ID = 'weather_bogota'
